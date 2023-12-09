@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Última Senha Chamada</title>
+    <!-- Adicione o link para o Bootstrap CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Última Senha Chamada</h2>
+        <div id="ultimaSenha" class="mt-4"></div>
+
+        <!-- Adicione o script JavaScript para atualizar em tempo real -->
+        <script>
+            function obterUltimaSenhaChamada() {
+                // Substitua a URL abaixo pela URL da sua API FastAPI
+                fetch('http://127.0.0.1:8000/ultima_senha_chamada/')
+                    .then(response => response.json())
+                    .then(data => {
+                        const ultimaSenhaElement = document.getElementById('ultimaSenha');
+                        if (data.ultima_senha_chamada) {
+                            const ultimaSenha = data.ultima_senha_chamada;
+                            ultimaSenhaElement.innerHTML = `
+                                <div class="alert alert-success">
+                                    <h1><strong>Senha:</strong> "${ultimaSenha.senha}"</h1><br>
+                                    <strong>Tipo:</strong> ${ultimaSenha.tipo}<br>
+                                    <strong>Chamada em:</strong> ${ultimaSenha.chamada_em}
+                                </div>
+                            `;
+                        } else {
+                            ultimaSenhaElement.innerHTML = `
+                                <div class="alert alert-warning">
+                                    <strong>Nenhuma senha foi chamada ainda.</strong>
+                                </div>
+                            `;
+                        }
+                    })
+                    .catch(error => console.error('Erro ao obter a última senha chamada:', error));
+            }
+
+            // Chame a função inicialmente
+            obterUltimaSenhaChamada();
+
+            // Atualize automaticamente a cada 5 segundos (5000 milissegundos)
+            setInterval(obterUltimaSenhaChamada, 1000);
+        </script>
+    </div>
+
+    <!-- Adicione os scripts do Bootstrap CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
